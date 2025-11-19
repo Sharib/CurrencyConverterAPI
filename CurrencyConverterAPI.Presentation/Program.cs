@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterApplicationServices()
-                    .RegisterInfrastructureServices()
+                    .RegisterInfrastructureServices(builder.Configuration)
                     .RegisterPresentationServices();
 
 builder.Services.AddRateLimiter(options =>
