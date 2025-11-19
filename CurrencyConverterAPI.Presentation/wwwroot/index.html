@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFG Maintenance Incident Management</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="app-title">AFG Service Centre</h1>
+                    <span class="app-subtitle">Maintenance Incident Management</span>
+                </div>
+                <div class="header-right">
+                    <button id="themeToggle" class="btn-icon" title="Toggle Dark Mode">
+                        <svg class="theme-icon" width="24" height="24" fill="currentColor">
+                            <use href="#icon-theme"></use>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="app-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="#dashboard" class="nav-item active" data-view="dashboard">
+                        <svg width="20" height="20" fill="currentColor"><use href="#icon-dashboard"></use></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#incidents" class="nav-item" data-view="incidents">
+                        <svg width="20" height="20" fill="currentColor"><use href="#icon-list"></use></svg>
+                        <span>All Incidents</span>
+                    </a>
+                    <a href="#create" class="nav-item" data-view="create">
+                        <svg width="20" height="20" fill="currentColor"><use href="#icon-plus"></use></svg>
+                        <span>Create Incident</span>
+                    </a>
+                    <a href="#review" class="nav-item" data-view="review">
+                        <svg width="20" height="20" fill="currentColor"><use href="#icon-check"></use></svg>
+                        <span>Review Queue</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content-area">
+                <!-- Dashboard View -->
+                <div id="dashboard-view" class="view active">
+                    <h2>Dashboard Overview</h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-total">0</div>
+                            <div class="stat-label">Total Incidents</div>
+                        </div>
+                        <div class="stat-card stat-draft">
+                            <div class="stat-value" id="stat-draft">0</div>
+                            <div class="stat-label">Draft</div>
+                        </div>
+                        <div class="stat-card stat-pending">
+                            <div class="stat-value" id="stat-pending">0</div>
+                            <div class="stat-label">Under Review</div>
+                        </div>
+                        <div class="stat-card stat-approved">
+                            <div class="stat-value" id="stat-approved">0</div>
+                            <div class="stat-label">Approved</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Recent Incidents</h3>
+                        <div id="recent-incidents" class="incidents-list"></div>
+                    </div>
+                </div>
+
+                <!-- All Incidents View -->
+                <div id="incidents-view" class="view">
+                    <div class="view-header">
+                        <h2>All Incidents</h2>
+                        <div class="filters">
+                            <select id="filter-status" class="form-select">
+                                <option value="">All Status</option>
+                                <option value="0">Draft</option>
+                                <option value="1">Submitted</option>
+                                <option value="2">Under Review</option>
+                                <option value="3">Approved</option>
+                                <option value="4">Rejected</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="all-incidents" class="incidents-list"></div>
+                </div>
+
+                <!-- Create Incident View -->
+                <div id="create-view" class="view">
+                    <h2>Create New Incident</h2>
+                    <form id="create-incident-form" class="incident-form">
+                        <div class="form-group">
+                            <label for="description">Description *</label>
+                            <textarea id="description" name="description" rows="4" required 
+                                placeholder="Describe the maintenance incident..."></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="type">Incident Type *</label>
+                                <select id="type" name="type" required>
+                                    <option value="0">Repair</option>
+                                    <option value="1">Warranty Claim</option>
+                                    <option value="2">Part Failure</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="serviceCentre">Service Centre *</label>
+                                <input type="text" id="serviceCentre" name="serviceCentre" required 
+                                    placeholder="e.g., Sydney AFG Service Centre">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cost">Cost Estimate ($) *</label>
+                            <input type="number" id="cost" name="cost" step="0.01" min="0" required 
+                                placeholder="0.00">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Create Incident</button>
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Review Queue View -->
+                <div id="review-view" class="view">
+                    <h2>Review Queue</h2>
+                    <div id="review-incidents" class="incidents-list"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Incident Detail Modal -->
+    <div id="incident-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Incident Details</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="incident-details"></div>
+            <div class="modal-footer">
+                <button id="approve-btn" class="btn btn-success">Approve</button>
+                <button id="reject-btn" class="btn btn-danger">Reject</button>
+                <button class="btn btn-secondary modal-close">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SVG Icons -->
+    <svg style="display: none;">
+        <symbol id="icon-theme" viewBox="0 0 24 24">
+            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </symbol>
+        <symbol id="icon-dashboard" viewBox="0 0 24 24">
+            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </symbol>
+        <symbol id="icon-list" viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24">
+            <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </symbol>
+    </svg>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

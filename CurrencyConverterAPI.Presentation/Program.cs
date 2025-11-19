@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterApplicationServices()
-                    .RegisterInfrastructureServices()
+                    .RegisterInfrastructureServices(builder.Configuration)
                     .RegisterPresentationServices();
 
 builder.Services.AddRateLimiter(options =>
@@ -51,6 +51,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Enable static files
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseRateLimiter();
 
