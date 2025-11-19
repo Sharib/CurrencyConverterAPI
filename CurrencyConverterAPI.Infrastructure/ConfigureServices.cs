@@ -1,4 +1,5 @@
 ﻿using CurrencyConverterAPI.Application.Common.Interfaces;
+using CurrencyConverterAPI.Infrastructure.Repositories;
 using CurrencyConverterAPI.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -17,6 +18,7 @@ public static class ConfigureServices
         });
 
         services.AddTransient<ICurrencyConverterClient, CurrencyConverterClient>();
+        services.AddSingleton<IMaintenanceIncidentRepository, InMemoryMaintenanceIncidentRepository>();
 
         return services;
     }
